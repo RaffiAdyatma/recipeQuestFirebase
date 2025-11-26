@@ -20,6 +20,7 @@ fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel = 
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -37,16 +38,22 @@ fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel = 
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Password") }, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(value = confirmPassword, onValueChange = { confirmPassword = it }, label = { Text("Confirm Password") }, modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(onClick = {
-                authViewModel.register(name.trim(), email.trim(), password,
-                    onSuccess = { userId ->
-                        navController.navigate("home") {
-                            popUpTo("start") { inclusive = true }
-                        }
-                    },
-                    onError = { /* show error */ }
-                )
+                if (password.equals(confirmPassword)){
+                    authViewModel.register(name.trim(), email.trim(), password,
+                        onSuccess = { userId ->
+                            navController.navigate("home") {
+                                popUpTo("start") { inclusive = true }
+                            }
+                        },
+                        onError = { /* show error */ }
+                    )
+                }
+
+
             }, modifier = Modifier.fillMaxWidth().height(48.dp)) {
                 Text("Daftar")
             }
